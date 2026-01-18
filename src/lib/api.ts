@@ -16,7 +16,7 @@ export const apiFetch = async (endpoint: string, options: any = {}) => {
         },
     });
 
-    if (response.status === 403) {
+    if (response.status === 403 && !endpoint.includes('/auth/login')) {
         localStorage.removeItem('parent');
         window.location.href = '/login';
     }

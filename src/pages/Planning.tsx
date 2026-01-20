@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Download, FileText, ChevronDown, ChevronUp } from 'lucide-react';
+import { Download, FileText, ChevronDown, ChevronUp, BookOpen, ChevronLeft } from 'lucide-react';
 import { apiFetch } from '../lib/api';
 
 const Planning = () => {
@@ -8,29 +8,85 @@ const Planning = () => {
     const [planings, setPlanings] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [expandedId, setExpandedId] = useState<number | null>(null);
+    const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
 
     useEffect(() => {
         apiFetch(`/api/mobile/student/${studentId}/planning`)
             .then(res => res.json())
             .then(data => {
-                setPlanings(data);
+                if (Array.isArray(data)) {
+                    setPlanings(data);
+                }
                 setLoading(false);
             });
     }, [studentId]);
 
+    const subjects = Array.from(new Set(planings.map(p => p.teacher?.subject?.name).filter(Boolean)));
+    const filteredPlanings = selectedSubject
+        ? planings.filter(p => p.teacher?.subject?.name === selectedSubject)
+        : [];
+
+    if (loading) return <p>Chargement...</p>;
+
+    if (!selectedSubject) {
+        return (
+            <div>
+                <h2 style={{ marginBottom: '1.5rem' }}>Planning annuel</h2>
+                <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>Sélectionnez une matière pour voir le planning :</p>
+
+                {subjects.length === 0 ? (
+                    <div className="glass" style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+                        Aucune matière disponible.
+                    </div>
+                ) : (
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+                        {subjects.map((subject: any) => (
+                            <div
+                                key={subject}
+                                onClick={() => setSelectedSubject(subject)}
+                                className="glass"
+                                style={{
+                                    padding: '1.5rem 1rem',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '0.75rem',
+                                    textAlign: 'center',
+                                    cursor: 'pointer',
+                                    transition: 'transform 0.2s'
+                                }}
+                            >
+                                <div style={{ color: 'var(--primary)' }}>
+                                    <BookOpen size={32} />
+                                </div>
+                                <span style={{ fontSize: '1rem', fontWeight: 600 }}>{subject}</span>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        );
+    }
+
     return (
         <div>
-            <h2 style={{ marginBottom: '1.5rem' }}>Planning annuel</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+                <button
+                    onClick={() => setSelectedSubject(null)}
+                    style={{ background: 'none', border: 'none', color: 'var(--text)', padding: '0.5rem', marginLeft: '-0.5rem' }}
+                >
+                    <ChevronLeft size={24} />
+                </button>
+                <h2 style={{ margin: 0 }}>{selectedSubject}</h2>
+            </div>
 
-            {loading ? (
-                <p>Chargement...</p>
-            ) : planings.length === 0 ? (
+            {filteredPlanings.length === 0 ? (
                 <div className="glass" style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-                    Aucun planning disponible.
+                    Aucun planning disponible pour cette matière.
                 </div>
             ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    {planings.map(planing => (
+                    {filteredPlanings.map(planing => (
                         <div key={planing.id} className="glass" style={{ overflow: 'hidden' }}>
                             <div
                                 onClick={() => setExpandedId(expandedId === planing.id ? null : planing.id)}
@@ -38,7 +94,7 @@ const Planning = () => {
                             >
                                 <div>
                                     <h4 style={{ fontSize: '1.1rem' }}>{planing.name}</h4>
-                                    <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>{planing.teacher?.subject?.name} • {planing.type}</p>
+                                    <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>{planing.type}</p>
                                 </div>
                                 {expandedId === planing.id ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                             </div>

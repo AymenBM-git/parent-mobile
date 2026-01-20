@@ -1,15 +1,26 @@
+import { useState, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Home, Calendar, BookOpen, Bell, Menu } from 'lucide-react';
 
 const Layout = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { studentId } = useParams();
+    const { studentId: urlStudentId } = useParams();
+    const [lastStudentId, setLastStudentId] = useState(localStorage.getItem('lastStudentId'));
+
+    useEffect(() => {
+        if (urlStudentId) {
+            localStorage.setItem('lastStudentId', urlStudentId);
+            setLastStudentId(urlStudentId);
+        }
+    }, [urlStudentId]);
+
+    const effectiveStudentId = urlStudentId || lastStudentId;
 
     const navItems = [
-        { icon: Home, label: 'Accueil', path: studentId ? `/home/${studentId}` : '/dashboard' },
-        { icon: Calendar, label: 'Emploi', path: `/schedule/${studentId}` },
-        { icon: BookOpen, label: 'TAF', path: `/tafs/${studentId}` },
+        { icon: Home, label: 'Accueil', path: effectiveStudentId ? `/home/${effectiveStudentId}` : '/dashboard' },
+        { icon: Calendar, label: 'Emploi', path: effectiveStudentId ? `/schedule/${effectiveStudentId}` : '/dashboard' },
+        { icon: BookOpen, label: 'TAF', path: effectiveStudentId ? `/tafs/${effectiveStudentId}` : '/dashboard' },
         { icon: Bell, label: 'Alertes', path: '/events' },
     ];
 

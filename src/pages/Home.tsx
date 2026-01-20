@@ -58,15 +58,15 @@ const Home = () => {
                     alignItems: 'center',
                     justifyContent: 'center'
                 }}>
-                    {student?.photo ? (
-                        <img src={student.photo} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
-                    ) : (
-                        <span style={{ fontSize: '1.25rem', fontWeight: 700 }}>{student?.firstName?.charAt(0)}</span>
-                    )}
+                    {/** 1st letter comme image */}
+                    <span style={{ fontSize: '1.25rem', fontWeight: 700 }}>{student?.firstName?.charAt(0)}</span>
+
                 </div>
                 <div>
                     <h2 style={{ fontSize: '1.25rem' }}>{student?.firstName} {student?.lastName}</h2>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>{student?.classe?.name}</p>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
+                        {(student?.classe?.level === "1") ? "السابعة أساسي " + student?.classe?.name : (student?.classe?.level === "2") ? "الثامنة أساسي " + student?.classe?.name : (student?.classe?.level === "3") ? "التاسعة أساسي " + student?.classe?.name : ""}
+                    </p>
                 </div>
             </div>
 

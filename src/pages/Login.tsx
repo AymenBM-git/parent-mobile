@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogIn, User, Lock } from 'lucide-react';
+import { LogIn, User, Lock, Sun, Moon } from 'lucide-react';
 import { apiFetch } from '../lib/api';
+import { useTheme } from '../lib/ThemeContext';
 
 const Login = () => {
+    const { theme, toggleTheme } = useTheme();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -30,7 +32,13 @@ const Login = () => {
     };
 
     return (
-        <div style={{ padding: '2rem', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div style={{ padding: '2rem', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative' }}>
+            <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
+                <button onClick={toggleTheme} className="glass" style={{ padding: '0.75rem', borderRadius: '1rem', border: 'none', color: 'var(--text)', display: 'flex', alignItems: 'center' }}>
+                    {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                </button>
+            </div>
+
             <div className="glass" style={{ padding: '2rem', textAlign: 'center' }}>
                 <h1 style={{ marginBottom: '0.5rem', background: 'linear-gradient(135deg, var(--primary), var(--secondary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Leaders Mobile</h1>
                 <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>Espace Parents</p>
@@ -50,8 +58,8 @@ const Login = () => {
                                 padding: '0.875rem 1rem 0.875rem 3rem',
                                 borderRadius: '1rem',
                                 border: '1px solid var(--border)',
-                                background: 'rgba(255,255,255,0.05)',
-                                color: 'white',
+                                background: 'var(--glass)',
+                                color: 'var(--text)',
                                 outline: 'none'
                             }}
                         />
@@ -68,8 +76,8 @@ const Login = () => {
                                 padding: '0.875rem 1rem 0.875rem 3rem',
                                 borderRadius: '1rem',
                                 border: '1px solid var(--border)',
-                                background: 'rgba(255,255,255,0.05)',
-                                color: 'white',
+                                background: 'var(--glass)',
+                                color: 'var(--text)',
                                 outline: 'none'
                             }}
                         />

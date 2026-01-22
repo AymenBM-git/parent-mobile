@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, ChevronRight, LogOut } from 'lucide-react';
+import { User, ChevronRight, LogOut, Sun, Moon } from 'lucide-react';
 import { apiFetch } from '../lib/api';
+import { useTheme } from '../lib/ThemeContext';
 
 const Dashboard = () => {
+    const { theme, toggleTheme } = useTheme();
     const [children, setChildren] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -40,9 +42,14 @@ const Dashboard = () => {
                     <h1 style={{ fontSize: '1.5rem' }}>Bonjour, {parent.name} 👋</h1>
                     <p style={{ color: 'var(--text-muted)' }}>Bienvenue dans votre espace</p>
                 </div>
-                <button onClick={handleLogout} className="glass" style={{ padding: '0.75rem', borderRadius: '1rem', border: 'none', color: 'var(--accent)' }}>
-                    <LogOut size={20} />
-                </button>
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                    <button onClick={toggleTheme} className="glass" style={{ padding: '0.75rem', borderRadius: '1rem', border: 'none', color: 'var(--text)', display: 'flex', alignItems: 'center' }}>
+                        {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                    </button>
+                    <button onClick={handleLogout} className="glass" style={{ padding: '0.75rem', borderRadius: '1rem', border: 'none', color: 'var(--accent)' }}>
+                        <LogOut size={20} />
+                    </button>
+                </div>
             </header>
 
             <h3 style={{ marginBottom: '1rem' }}>Mes enfants</h3>

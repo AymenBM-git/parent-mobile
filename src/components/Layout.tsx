@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Home, Calendar, BookOpen, Bell, Menu } from 'lucide-react';
+import { Home, Calendar, BookOpen, Bell, Menu, Sun, Moon } from 'lucide-react';
+import { useTheme } from '../lib/ThemeContext';
 
 const Layout = () => {
+    const { theme, toggleTheme } = useTheme();
     const location = useLocation();
     const navigate = useNavigate();
     const { studentId: urlStudentId } = useParams();
@@ -32,7 +34,10 @@ const Layout = () => {
         <div className="app-container" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'var(--background)' }}>
             <header className="glass" style={{ margin: '1rem', padding: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 10 }}>
                 <h2 style={{ fontSize: '1.25rem' }}>Leaders App</h2>
-                <div style={{ display: 'flex', gap: '1rem' }}>
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                    <button onClick={toggleTheme} style={{ background: 'none', border: 'none', color: 'var(--text)', display: 'flex', alignItems: 'center' }}>
+                        {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                    </button>
                     <button onClick={() => navigate('/dashboard')} style={{ background: 'none', border: 'none', color: 'var(--text)' }}>
                         <Menu size={24} />
                     </button>

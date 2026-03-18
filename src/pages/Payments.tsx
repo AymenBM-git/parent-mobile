@@ -45,7 +45,7 @@ const Payments = () => {
                                     <CheckCircle size={24} />
                                 </div>
                                 <div>
-                                    <h4 style={{ fontSize: '1rem' }}>{payment.as}</h4>
+                                    <h4 style={{ fontSize: '1rem' }}>{payment.title || payment.as}</h4>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
                                         <Calendar size={14} /> <span>{new Date(payment.paymentDate).toLocaleDateString()}</span>
                                     </div>

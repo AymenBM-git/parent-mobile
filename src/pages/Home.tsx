@@ -44,6 +44,7 @@ const Home = () => {
         { icon: AlertCircle, label: 'Absences', path: `/absences/${studentId}`, color: '#f43f5e' },
         { icon: ClipboardList, label: 'Planning', path: `/planning/${studentId}`, color: '#22c55e' },
         { icon: CreditCard, label: 'Paiements', path: `/payments/${studentId}`, color: '#eab308' },
+        { icon: BookOpen, label: 'Notes', path: `/notes/${studentId}`, color: '#f97316' },
     ];
 
     return (

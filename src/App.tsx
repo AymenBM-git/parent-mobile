@@ -8,6 +8,7 @@ import Absences from './pages/Absences.tsx';
 import Planning from './pages/Planning.tsx';
 import Payments from './pages/Payments.tsx';
 import Events from './pages/Events.tsx';
+import Notes from './pages/Notes.tsx';
 import PrivateRoute from './components/PrivateRoute.tsx';
 import Layout from './components/Layout.tsx';
 
@@ -25,6 +26,7 @@ function App() {
             <Route path="/absences/:studentId" element={<Absences />} />
             <Route path="/planning/:studentId" element={<Planning />} />
             <Route path="/payments/:studentId" element={<Payments />} />
+            <Route path="/notes/:studentId" element={<Notes />} />
             <Route path="/events" element={<Events />} />
           </Route>
         </Route>

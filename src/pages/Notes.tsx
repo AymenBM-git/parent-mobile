@@ -30,12 +30,11 @@ const Notes = () => {
                         setSelectedPeriod(data.periods[0]);
                     }
                 } else {
-                    alert("Erreur filtres: " + data.error);
+                    console.error("Erreur filtres:", data.error);
                 }
             })
             .catch(err => {
                 console.error("Error fetching filters:", err);
-                alert("Erreur connexion filtres: " + err.message);
             });
     }, [studentId]);
 

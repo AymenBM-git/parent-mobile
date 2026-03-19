@@ -26,13 +26,17 @@ const Notes = () => {
                     setPeriods(data.periods || []);
                     setCurrentAS(data.currentAS || '');
                     
-                    // Auto-select first period
                     if (data.periods?.length > 0) {
                         setSelectedPeriod(data.periods[0]);
                     }
+                } else {
+                    alert("Erreur filtres: " + data.error);
                 }
             })
-            .catch(err => console.error("Error fetching filters:", err));
+            .catch(err => {
+                console.error("Error fetching filters:", err);
+                alert("Erreur connexion filtres: " + err.message);
+            });
     }, [studentId]);
 
     // Fetch notes when filters change
@@ -77,7 +81,7 @@ const Notes = () => {
                         border: 'none', 
                         padding: '0.75rem', 
                         borderRadius: '1rem',
-                        color: 'white',
+                        color: 'var(--text)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center'
@@ -85,7 +89,7 @@ const Notes = () => {
                 >
                     <ArrowLeft size={20} />
                 </button>
-                <h2 style={{ fontSize: '1.25rem', fontWeight: 700 }}>Notes & Résultats</h2>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text)' }}>Notes & Résultats</h2>
             </div>
 
             {/* Filters Section */}
@@ -96,17 +100,18 @@ const Notes = () => {
                         value={selectedSubject} 
                         onChange={(e) => setSelectedSubject(e.target.value)}
                         style={{ 
-                            background: 'rgba(255,255,255,0.05)', 
-                            border: '1px solid rgba(255,255,255,0.1)', 
+                            background: 'var(--glass)', 
+                            border: '1px solid var(--glass-border)', 
                             borderRadius: '0.75rem', 
                             padding: '0.75rem', 
-                            color: 'white',
-                            outline: 'none'
+                            color: 'var(--text)',
+                            outline: 'none',
+                            WebkitAppearance: 'none'
                         }}
                     >
-                        <option value="" style={{ background: '#1e293b' }}>Toutes les matières</option>
+                        <option value="" style={{ background: 'var(--background)', color: 'var(--text)' }}>Toutes les matières</option>
                         {subjects.map(s => (
-                            <option key={s.id} value={s.id} style={{ background: '#1e293b' }}>{s.name}</option>
+                            <option key={s.id} value={s.id} style={{ background: 'var(--background)', color: 'var(--text)' }}>{s.name}</option>
                         ))}
                     </select>
                 </div>
@@ -118,18 +123,19 @@ const Notes = () => {
                             value={selectedPeriod} 
                             onChange={(e) => setSelectedPeriod(e.target.value)}
                             style={{ 
-                                background: 'rgba(255,255,255,0.05)', 
-                                border: '1px solid rgba(255,255,255,0.1)', 
+                                background: 'var(--glass)', 
+                                border: '1px solid var(--glass-border)', 
                                 borderRadius: '0.75rem', 
                                 padding: '0.75rem', 
-                                color: 'white',
+                                color: 'var(--text)',
                                 outline: 'none',
-                                width: '100%'
+                                width: '100%',
+                                WebkitAppearance: 'none'
                             }}
                         >
-                            <option value="" style={{ background: '#1e293b' }}>Toutes</option>
+                            <option value="" style={{ background: 'var(--background)', color: 'var(--text)' }}>Toutes</option>
                             {periods.map(p => (
-                                <option key={p} value={p} style={{ background: '#1e293b' }}>{p}</option>
+                                <option key={p} value={p} style={{ background: 'var(--background)', color: 'var(--text)' }}>{p}</option>
                             ))}
                         </select>
                     </div>
@@ -137,8 +143,8 @@ const Notes = () => {
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                         <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginLeft: '0.25rem' }}>Année Scolaire</label>
                         <div style={{ 
-                            background: 'rgba(255,255,255,0.02)', 
-                            border: '1px solid rgba(255,255,255,0.05)', 
+                            background: 'var(--glass)', 
+                            border: '1px solid var(--glass-border)', 
                             borderRadius: '0.75rem', 
                             padding: '0.75rem', 
                             color: 'var(--text-muted)',
@@ -163,14 +169,16 @@ const Notes = () => {
             ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     {Object.entries(notesBySubject).map(([subject, notes]) => (
-                        <div key={subject} className="glass">
+                        <div key={subject} className="glass" style={{ marginBottom: '1rem' }}>
                             <div style={{ 
                                 padding: '1rem', 
-                                borderBottom: '1px solid rgba(255,255,255,0.05)', 
-                                background: 'rgba(255,255,255,0.02)',
+                                borderBottom: '1px solid var(--glass-border)', 
+                                background: 'var(--glass)',
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '0.75rem'
+                                gap: '0.75rem',
+                                borderTopLeftRadius: '1.5rem',
+                                borderTopRightRadius: '1.5rem'
                             }}>
                                 <div style={{ 
                                     padding: '0.5rem', 
@@ -180,7 +188,7 @@ const Notes = () => {
                                 }}>
                                     <BookOpen size={18} />
                                 </div>
-                                <h3 style={{ fontSize: '1rem', fontWeight: 600 }}>{subject}</h3>
+                                <h3 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text)' }}>{subject}</h3>
                             </div>
                             <div style={{ padding: '0.5rem' }}>
                                 {notes.map((n, idx) => (
@@ -191,13 +199,13 @@ const Notes = () => {
                                             display: 'flex', 
                                             justifyContent: 'space-between', 
                                             alignItems: 'center',
-                                            borderBottom: idx === notes.length - 1 ? 'none' : '1px solid rgba(255,255,255,0.05)'
+                                            borderBottom: idx === notes.length - 1 ? 'none' : '1px solid var(--glass-border)'
                                         }}
                                     >
                                         <div>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-                                                <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>{n.type}</span>
-                                                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', background: 'rgba(255,255,255,0.05)', padding: '0.1rem 0.4rem', borderRadius: '0.4rem' }}>{n.period}</span>
+                                                <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text)' }}>{n.type}</span>
+                                                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', background: 'var(--glass)', padding: '0.1rem 0.4rem', borderRadius: '0.4rem', border: '1px solid var(--glass-border)' }}>{n.period}</span>
                                             </div>
                                             <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                                                 {new Date(n.date).toLocaleDateString()}
@@ -223,7 +231,7 @@ const Notes = () => {
                                                     fontWeight: 700, 
                                                     color: n.note >= 10 ? '#22c55e' : '#f43f5e'
                                                 }}>
-                                                    {n.note}<span style={{ fontSize: '0.8rem', opacity: 0.6 }}>/20</span>
+                                                    {n.note}<span style={{ fontSize: '0.8rem', opacity: 0.6, color: 'var(--text-muted)' }}>/20</span>
                                                 </div>
                                             )}
                                         </div>

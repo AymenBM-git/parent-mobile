@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Bell, BookOpen, AlertCircle, Calendar, CreditCard, ClipboardList } from 'lucide-react';
+import { Bell, BookOpen, AlertCircle, Calendar, CreditCard, ClipboardList, MessageSquare } from 'lucide-react';
 import { apiFetch } from '../lib/api';
 
 const Home = () => {
@@ -45,6 +45,7 @@ const Home = () => {
         { icon: ClipboardList, label: 'Planning', path: `/planning/${studentId}`, color: '#22c55e' },
         { icon: CreditCard, label: 'Paiements', path: `/payments/${studentId}`, color: '#eab308' },
         { icon: BookOpen, label: 'Notes', path: `/notes/${studentId}`, color: '#f97316' },
+        { icon: MessageSquare, label: 'Chat', path: `/chat/${studentId}`, color: '#06b6d4' },
     ];
 
     return (

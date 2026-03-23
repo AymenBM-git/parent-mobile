@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Home, Calendar, BookOpen, Bell, Menu, Sun, Moon } from 'lucide-react';
+import { Home, Calendar, BookOpen, Bell, Menu, Sun, Moon, MessageSquare } from 'lucide-react';
 import { useTheme } from '../lib/ThemeContext';
 
 const Layout = () => {
@@ -23,6 +23,7 @@ const Layout = () => {
         { icon: Home, label: 'Accueil', path: effectiveStudentId ? `/home/${effectiveStudentId}` : '/dashboard' },
         { icon: Calendar, label: 'Emploi', path: effectiveStudentId ? `/schedule/${effectiveStudentId}` : '/dashboard' },
         { icon: BookOpen, label: 'TAF', path: effectiveStudentId ? `/tafs/${effectiveStudentId}` : '/dashboard' },
+        { icon: MessageSquare, label: 'Chat', path: effectiveStudentId ? `/chat/${effectiveStudentId}` : '/dashboard' },
         { icon: Bell, label: 'Alertes', path: '/events' },
     ];
 

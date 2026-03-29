@@ -10,6 +10,8 @@ const Chat = () => {
     const [activeTab, setActiveTab] = useState<'classe' | 'general'>('classe');
     const [student, setStudent] = useState<any>(null);
     const [loading, setLoading] = useState(false);
+    const [isBlocked, setIsBlocked] = useState(false);
+    const [blockReason, setBlockReason] = useState<string | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const parent = JSON.parse(localStorage.getItem('parent') || '{}');
 
@@ -36,7 +38,14 @@ const Chat = () => {
             const classIdParam = activeTab === 'classe' ? `&classId=${student.classId}` : '';
             const res = await apiFetch(`/api/mobile/chat?studentId=${studentId}${classIdParam}`);
             const data = await res.json();
-            if (Array.isArray(data)) {
+            
+            // Handle the new response format { messages, isBlocked, blockReason }
+            if (data.messages && Array.isArray(data.messages)) {
+                setMessages(data.messages);
+                setIsBlocked(data.isBlocked);
+                setBlockReason(data.blockReason);
+            } else if (Array.isArray(data)) {
+                // Fallback for old format
                 setMessages(data);
             }
         } catch (err) {
@@ -55,7 +64,7 @@ const Chat = () => {
 
     const handleSendMessage = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!newMessage.trim() || !student) return;
+        if (!newMessage.trim() || !student || isBlocked) return;
 
         const messageToSend = newMessage;
         setNewMessage('');
@@ -69,6 +78,13 @@ const Chat = () => {
                     message: messageToSend
                 })
             });
+            
+            if (!res.ok) {
+                const errorData = await res.json();
+                alert(errorData.error || "Erreur lors de l'envoi");
+                return;
+            }
+
             const data = await res.json();
             setMessages(prev => [...prev, data]);
             setTimeout(scrollToBottom, 50);
@@ -162,12 +178,29 @@ const Chat = () => {
                 <div ref={messagesEndRef} />
             </div>
 
-            <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: '0.5rem' }}>
+            {isBlocked && (
+                <div style={{ 
+                    padding: '0.75rem', 
+                    background: 'rgba(239, 68, 68, 0.1)', 
+                    color: '#ef4444', 
+                    borderRadius: '1rem', 
+                    fontSize: '0.85rem', 
+                    textAlign: 'center',
+                    border: '1px solid rgba(239, 68, 68, 0.2)'
+                }}>
+                    {blockReason === 'global' ? "Le chat général est désactivé." : 
+                     blockReason === 'class' ? "Le chat de votre classe est désactivé." : 
+                     "Votre accès au chat a été suspendu par l'administration."}
+                </div>
+            )}
+
+            <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: '0.5rem', opacity: isBlocked ? 0.6 : 1 }}>
                 <input
                     type="text"
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
-                    placeholder="Tapez votre message..."
+                    placeholder={isBlocked ? "Chat désactivé" : "Tapez votre message..."}
+                    disabled={isBlocked}
                     className="glass"
                     style={{
                         flex: 1,
@@ -175,23 +208,25 @@ const Chat = () => {
                         border: 'none',
                         borderRadius: '1.5rem',
                         outline: 'none',
-                        color: 'var(--text)'
+                        color: 'var(--text)',
+                        cursor: isBlocked ? 'not-allowed' : 'text'
                     }}
                 />
                 <button
                     type="submit"
+                    disabled={isBlocked || !newMessage.trim()}
                     className="glass"
                     style={{
                         width: '3.5rem',
                         height: '3.5rem',
                         borderRadius: '50%',
                         border: 'none',
-                        background: 'var(--primary)',
+                        background: isBlocked ? 'var(--text-muted)' : 'var(--primary)',
                         color: 'white',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        cursor: 'pointer'
+                        cursor: isBlocked ? 'not-allowed' : 'pointer'
                     }}
                 >
                     <Send size={20} />

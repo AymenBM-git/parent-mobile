@@ -10,6 +10,7 @@ import Payments from './pages/Payments.tsx';
 import Events from './pages/Events.tsx';
 import Notes from './pages/Notes.tsx';
 import Chat from './pages/Chat.tsx';
+import ChangePassword from './pages/ChangePassword.tsx';
 import PrivateRoute from './components/PrivateRoute.tsx';
 import Layout from './components/Layout.tsx';
 
@@ -30,6 +31,7 @@ function App() {
             <Route path="/notes/:studentId" element={<Notes />} />
             <Route path="/chat/:studentId" element={<Chat />} />
             <Route path="/events" element={<Events />} />
+            <Route path="/change-password" element={<ChangePassword />} />
           </Route>
         </Route>
         <Route path="/" element={<Navigate to="/dashboard" />} />

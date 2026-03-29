@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, ChevronRight, LogOut, Sun, Moon } from 'lucide-react';
+import { User, ChevronRight, LogOut, Sun, Moon, Lock } from 'lucide-react';
 import { apiFetch } from '../lib/api';
 import { useTheme } from '../lib/ThemeContext';
 
@@ -45,6 +45,9 @@ const Dashboard = () => {
                 <div style={{ display: 'flex', gap: '0.75rem' }}>
                     <button onClick={toggleTheme} className="glass" style={{ padding: '0.75rem', borderRadius: '1rem', border: 'none', color: 'var(--text)', display: 'flex', alignItems: 'center' }}>
                         {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                    </button>
+                    <button onClick={() => navigate('/change-password')} className="glass" style={{ padding: '0.75rem', borderRadius: '1rem', border: 'none', color: 'var(--primary)', display: 'flex', alignItems: 'center' }} title="Changer le mot de passe">
+                        <Lock size={20} />
                     </button>
                     <button onClick={handleLogout} className="glass" style={{ padding: '0.75rem', borderRadius: '1rem', border: 'none', color: 'var(--accent)' }}>
                         <LogOut size={20} />

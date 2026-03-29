@@ -1,6 +1,6 @@
 // Replace with your computer's local IP address (e.g., 192.168.1.XX)
 // You can find it by running 'ipconfig' in your terminal
-export const BASE_URL = 'https://leaders-boumhel.vercel.app'; // 'http://localhost:3000';
+export const BASE_URL = 'http://137.74.42.196:3000'; // 'https://leaders-boumhel.vercel.app';
 
 export const apiFetch = async (endpoint: string, options: any = {}) => {
     const url = endpoint.startsWith('http') ? endpoint : `${BASE_URL}${endpoint}`;
